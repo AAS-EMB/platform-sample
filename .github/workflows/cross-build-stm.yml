@@ -1,0 +1,33 @@
+name: STM32 Cross Build
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  stm32f7-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Install ARM toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-arm-none-eabi cmake ninja-build
+
+      - name: Configure (STM32F1)
+        run: |
+          cmake -S . -B build-stm32f1 \
+            -G Ninja \
+            -DPLATFORM=stm32f1 \
+            -DBUILD_TESTS=OFF \
+            -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/arm-none-eabi.cmake
+
+      - name: Build
+        run: |
+          cmake --build build-stm32f1
