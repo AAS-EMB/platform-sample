@@ -1,0 +1,12 @@
+[submodule "external/cmsis"]
+	path = external/cmsis
+	url = https://github.com/STMicroelectronics/cmsis-core
+[submodule "external/cmsis-device-f1"]
+	path = external/cmsis-device-f1
+	url = https://github.com/STMicroelectronics/cmsis-device-f1
+[submodule "external/stm32f1-hal"]
+	path = external/stm32f1-hal
+	url = https://github.com/STMicroelectronics/stm32f1xx_hal_driver
+[submodule "external/platform-drivers"]
+	path = external/platform-drivers
+	url = https://github.com/AAS-EMB/platform-drivers.git

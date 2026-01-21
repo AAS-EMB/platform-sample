@@ -1,0 +1,102 @@
+##############################
+# Build artifacts
+##############################
+
+/build/
+/build-*/
+/out/
+/cmake-build-*/
+/CMakeFiles/
+/CMakeCache.txt
+/CTestTestfile.cmake
+/Testing/
+/install/
+
+##############################
+# Compilers & toolchains
+##############################
+
+*.o
+*.obj
+*.elf
+*.hex
+*.bin
+*.map
+*.d
+*.a
+*.lib
+*.so
+*.dll
+*.exe
+
+##############################
+# STM32 / Embedded
+##############################
+
+*.lst
+*.axf
+*.svd
+*.ioc
+
+# Debug / flash tools
+*.log
+*.jlink
+*.stlink
+*.openocd
+
+##############################
+# IDEs
+##############################
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# CLion / JetBrains
+.idea/
+cmake-build-*/
+
+# Eclipse
+.project
+.cproject
+.settings/
+
+##############################
+# OS-specific
+##############################
+
+# macOS
+.DS_Store
+
+# Linux
+*~
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+##############################
+# Coverage & analysis
+##############################
+
+*.gcda
+*.gcno
+*.gcov
+coverage/
+lcov.info
+
+##############################
+# Python / scripts
+##############################
+
+__pycache__/
+*.pyc
+
+##############################
+# Temporary / backups
+##############################
+
+*.bak
+*.tmp
+*.swp
