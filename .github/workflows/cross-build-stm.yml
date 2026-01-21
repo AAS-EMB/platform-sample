@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  stm32f7-build:
+  stm32f1-build:
     runs-on: ubuntu-latest
 
     steps:
