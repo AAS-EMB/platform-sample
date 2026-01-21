@@ -10,3 +10,4 @@
 [submodule "external/platform-drivers"]
 	path = external/platform-drivers
 	url = https://github.com/AAS-EMB/platform-drivers.git
+	branch = main
