@@ -20,11 +20,13 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f1xx.h"
+#include "stm32f1xx_hal.h"
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
-
+#ifdef __cplusplus
+ extern "C" {
+#endif
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN TD */
 
@@ -81,6 +83,9 @@ void HAL_MspInit(void)
   /* USER CODE END MspInit 1 */
 }
 
+#ifdef __cplusplus
+}
+#endif
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */
