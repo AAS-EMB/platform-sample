@@ -73,6 +73,9 @@
 /** @addtogroup STM32F1xx_System_Private_Defines
   * @{
   */
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
 #if !defined  (HSE_VALUE) 
   #define HSE_VALUE               8000000U /*!< Default value of the External oscillator in Hz.
@@ -393,6 +396,10 @@ void SystemInit_ExtMemCtl(void)
 }
 #endif /* DATA_IN_ExtSRAM */
 #endif /* STM32F100xE || STM32F101xE || STM32F101xG || STM32F103xE || STM32F103xG */
+
+#ifdef __cplusplus
+}
+#endif
 
 /**
   * @}
