@@ -11,15 +11,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout main repo
+        uses: actions/checkout@v4
         with:
-          submodules: recursive
-
+          fetch-depth: 0
+          
+      - name: Initialize and update submodules
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive --remote --force
+          git submodule status --recursive
+          
       - name: Install ARM toolchain
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc-arm-none-eabi cmake ninja-build
-
+          
       - name: Configure (STM32F1)
         run: |
           cmake -S . -B build-stm32f1 \
@@ -27,7 +34,7 @@ jobs:
             -DPLATFORM=stm32f1 \
             -DBUILD_TESTS=OFF \
             -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/arm-none-eabi.cmake
-
+            
       - name: Build
         run: |
           cmake --build build-stm32f1

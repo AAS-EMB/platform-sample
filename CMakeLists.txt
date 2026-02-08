@@ -21,6 +21,8 @@ include(cmake/external/stm32f1_hal.cmake)
 
 set(CHRONO_CLOCKS_LIB ON CACHE BOOL "" FORCE)
 set(GPIO_LIB ON CACHE BOOL "" FORCE)
+set(CORO_LIB ON CACHE BOOL "" FORCE)
+
 set(PLATFORM ${PLATFORM} CACHE STRING "Target platform" FORCE)
 add_subdirectory(external/platform-drivers)
 
@@ -44,6 +46,7 @@ target_link_libraries(sample
         stm32f1_hal
         chrono_clocks
         gpio_driver
+        coro_lib
 )
 
 add_custom_command(TARGET sample POST_BUILD
