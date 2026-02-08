@@ -11,23 +11,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout with full history (important for submodules)
+        uses: actions/checkout@v4
         with:
           submodules: recursive
-
+          fetch-depth: 0  # ← КЛЮЧЕВОЙ ПАРАМЕТР: полная история
+          
+      - name: Debug submodules
+        run: |
+          echo "=== Git version ==="
+          git --version
+          echo "=== Submodule status ==="
+          git submodule status --recursive
+          echo "=== .gitmodules ==="
+          cat .gitmodules || true
+          echo "=== Listing external/ ==="
+          ls -la external/ || echo "No external directory"
+          
       - name: Install ARM toolchain
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc-arm-none-eabi cmake ninja-build
-
+          
+      - name: Verify toolchain
+        run: |
+          arm-none-eabi-gcc --version
+          cmake --version
+          
       - name: Configure (STM32F1)
         run: |
           cmake -S . -B build-stm32f1 \
             -G Ninja \
             -DPLATFORM=stm32f1 \
             -DBUILD_TESTS=OFF \
-            -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/arm-none-eabi.cmake
-
+            -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/arm-none-eabi.cmake \
+            -DCMAKE_BUILD_TYPE=Release
+            
       - name: Build
         run: |
-          cmake --build build-stm32f1
+          cmake --build build-stm32f1 --verbose
+          
+      - name: Check build artifacts
+        run: |
+          echo "=== Build artifacts ==="
+          find build-stm32f1 -name "*.elf" -o -name "*.hex" -o -name "*.bin" | head -20
