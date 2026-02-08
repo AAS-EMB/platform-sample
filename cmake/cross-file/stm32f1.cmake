@@ -13,8 +13,9 @@ set(PLATFORM_COMPILE_OPTIONS
     -fno-exceptions
     -fno-rtti
     -fno-threadsafe-statics
-    -O0
-    -g3
+    -O3
+    -g0
+    -fcoroutines
 )
 
 set(PLATFORM_LINK_OPTIONS
