@@ -35,7 +35,7 @@ async::coro_task blink_led4() noexcept
 int main() {
     async::coro_task::set_resource(pool);
 
-    auto res = platform::hw_init();
+    [[maybe_unused]] auto res = platform::hw_init();
 
     async::launch_task(blink_led3).resume();
     async::launch_task(blink_led4).resume();
