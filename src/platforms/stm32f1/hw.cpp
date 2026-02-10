@@ -10,7 +10,7 @@ extern "C" {
 void SysTick_Handler()
 {
     HAL_IncTick();
-    steady_clock::traits::systick_irq();
+    chrono_traits::systick_irq();
 }
 
 }
@@ -34,7 +34,7 @@ IGpio & hw_instance_::led4() noexcept {
 
     GPIO_Init();
 
-    steady_clock::traits::init();
+    chrono_traits::init();
     hw_instance_::led3().reset();
     hw_instance_::led4().reset();
 

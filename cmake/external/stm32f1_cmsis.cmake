@@ -9,3 +9,5 @@ target_compile_definitions(stm32f1_cmsis INTERFACE
     STM32F100xB
     STM32F1
 )
+
+target_link_libraries(stm32f1_cmsis INTERFACE platform_flags)

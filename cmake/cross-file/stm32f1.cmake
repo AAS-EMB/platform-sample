@@ -2,42 +2,50 @@ message(STATUS "Using STM32F1 platform")
 
 set(MCU cortex-m3)
 
-set(PLATFORM_COMPILE_OPTIONS
+set(PLATFORM_COMMON_FLAGS
     -mcpu=${MCU}
     -mthumb
+    -O3
+    -g0
+)
+
+set(PLATFORM_C_FLAGS
     -Wall
     -Wextra
     -Wpedantic
     -ffunction-sections
     -fdata-sections
+)
+
+set(PLATFORM_CXX_FLAGS
+    ${PLATFORM_C_FLAGS}
     -fno-exceptions
     -fno-rtti
     -fno-threadsafe-statics
-    -O3
-    -g0
     -fcoroutines
 )
 
-set(PLATFORM_LINK_OPTIONS
+set(PLATFORM_LINK_COMMON
     -mcpu=${MCU}
     -mthumb
     -Wl,--gc-sections
-    -Wl,--start-group
+    -Wl,--print-memory-usage
+    -specs=nano.specs
+    -specs=nosys.specs
+)
+
+set(PLATFORM_LINK_LIBS
     -lc
     -lm
     -lstdc++
     -lsupc++
-    -Wl,--end-group
-    -Wl,--print-memory-usage
-    -specs=nano.specs
-    -specs=nosys.specs
 )
 
 set(LINKER_SCRIPT
     ${CMAKE_SOURCE_DIR}/src/platforms/stm32f1/system/linker.ld
 )
 
-list(APPEND PLATFORM_LINK_OPTIONS
+set(PLATFORM_LINK_SCRIPT
     -T${LINKER_SCRIPT}
 )
 

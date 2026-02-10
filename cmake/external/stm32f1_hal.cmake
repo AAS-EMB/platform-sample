@@ -25,4 +25,7 @@ target_include_directories(stm32f1_hal PUBLIC
     ${CMAKE_SOURCE_DIR}/src/platforms/stm32f1/system
 )
 
-target_link_libraries(stm32f1_hal PUBLIC stm32f1_cmsis)
+target_link_libraries(stm32f1_hal PUBLIC
+    stm32f1_cmsis
+    platform_flags
+)

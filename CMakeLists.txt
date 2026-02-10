@@ -48,8 +48,22 @@ endif()
 
 include(cmake/cross-file/${PLATFORM}.cmake)
 
-add_compile_options(${PLATFORM_COMPILE_OPTIONS})
-add_link_options(${PLATFORM_LINK_OPTIONS})
+add_library(platform_flags INTERFACE)
+
+target_compile_options(platform_flags INTERFACE
+    $<$<COMPILE_LANGUAGE:C>:${PLATFORM_COMMON_FLAGS} ${PLATFORM_C_FLAGS}>
+    $<$<COMPILE_LANGUAGE:CXX>:${PLATFORM_COMMON_FLAGS} ${PLATFORM_CXX_FLAGS}>
+    $<$<COMPILE_LANGUAGE:ASM>:${PLATFORM_COMMON_FLAGS}>
+)
+
+target_link_options(platform_flags INTERFACE
+    ${PLATFORM_LINK_COMMON}
+    ${PLATFORM_LINK_SCRIPT}
+)
+
+target_link_libraries(platform_flags INTERFACE
+    ${PLATFORM_LINK_LIBS}
+)
 
 # =========================================================
 # External dependencies
@@ -79,13 +93,15 @@ add_executable(sample
     ${CMAKE_SOURCE_DIR}/src/platforms/stm32f1/system/sysmem.c
 )
 
+target_link_libraries(sample PRIVATE platform_flags)
+
 set_target_properties(sample PROPERTIES
-    OUTPUT_NAME "sample-${PROJECT_VERSION_FULL}"
+    OUTPUT_NAME "sample-${PLATFORM}-${PROJECT_VERSION_FULL}"
     SUFFIX ".elf"
 )
 
 target_link_options(sample PRIVATE
-    -Wl,-Map=$<TARGET_FILE_DIR:sample>/sample-${PROJECT_VERSION_FULL}.map
+    -Wl,-Map=$<TARGET_FILE_DIR:sample>/sample-${PLATFORM}-${PROJECT_VERSION_FULL}.map
 )
 
 target_include_directories(sample PRIVATE
@@ -109,9 +125,9 @@ target_link_libraries(sample
 add_custom_command(TARGET sample POST_BUILD
     COMMAND ${CMAKE_OBJCOPY} -O binary
             $<TARGET_FILE:sample>
-            $<TARGET_FILE_DIR:sample>/sample-${PROJECT_VERSION_FULL}.bin
+            $<TARGET_FILE_DIR:sample>/sample-${PLATFORM}-${PROJECT_VERSION_FULL}.bin
     COMMAND ${CMAKE_OBJCOPY} -O ihex
             $<TARGET_FILE:sample>
-            $<TARGET_FILE_DIR:sample>/sample-${PROJECT_VERSION_FULL}.hex
+            $<TARGET_FILE_DIR:sample>/sample-${PLATFORM}-${PROJECT_VERSION_FULL}.hex
     COMMENT "Generating binary and hex images (${PROJECT_VERSION_FULL})"
 )
