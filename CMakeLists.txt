@@ -9,9 +9,8 @@ project(platform-sample
 # Versioning
 # =========================================================
 
-if(DEFINED ENV{BUILD_NUMBER})
-    set(PROJECT_BUILD $ENV{BUILD_NUMBER})
-else()
+set(PROJECT_BUILD $ENV{BUILD_NUMBER})
+if(NOT PROJECT_BUILD)
     set(PROJECT_BUILD 0)
 endif()
 
@@ -45,32 +44,13 @@ endif()
 # =========================================================
 # Toolchain / platform
 # =========================================================
-
-include(cmake/cross-file/${PLATFORM}.cmake)
-
-add_library(platform_flags INTERFACE)
-
-target_compile_options(platform_flags INTERFACE
-    $<$<COMPILE_LANGUAGE:C>:${PLATFORM_COMMON_FLAGS} ${PLATFORM_C_FLAGS}>
-    $<$<COMPILE_LANGUAGE:CXX>:${PLATFORM_COMMON_FLAGS} ${PLATFORM_CXX_FLAGS}>
-    $<$<COMPILE_LANGUAGE:ASM>:${PLATFORM_COMMON_FLAGS}>
-)
-
-target_link_options(platform_flags INTERFACE
-    ${PLATFORM_LINK_COMMON}
-    ${PLATFORM_LINK_SCRIPT}
-)
-
-target_link_libraries(platform_flags INTERFACE
-    ${PLATFORM_LINK_LIBS}
+set(PLATFORM_LINK_SCRIPT
+    -T${CMAKE_SOURCE_DIR}/src/platforms/stm32f1/system/linker.ld
 )
 
 # =========================================================
 # External dependencies
 # =========================================================
-
-include(cmake/external/stm32f1_cmsis.cmake)
-include(cmake/external/stm32f1_hal.cmake)
 
 set(CHRONO_CLOCKS_LIB ON CACHE BOOL "" FORCE)
 set(GPIO_LIB ON CACHE BOOL "" FORCE)
@@ -91,9 +71,17 @@ add_executable(sample
     ${CMAKE_SOURCE_DIR}/src/platforms/stm32f1/system/stm32f1xx_it.c
     ${CMAKE_SOURCE_DIR}/src/platforms/stm32f1/system/syscalls.c
     ${CMAKE_SOURCE_DIR}/src/platforms/stm32f1/system/sysmem.c
+    ${CMAKE_SOURCE_DIR}/src/platforms/stm32f1/system/system_stm32f1xx.c
+    ${CMAKE_SOURCE_DIR}/src/platforms/stm32f1/system/stm32f1xx_hal_msp.c
 )
 
-target_link_libraries(sample PRIVATE platform_flags)
+target_compile_options(sample PRIVATE
+    -O3
+    -Wall
+    -Wextra
+
+    $<$<COMPILE_LANGUAGE:CXX>:-fcoroutines -fno-exceptions -fno-rtti>
+)
 
 set_target_properties(sample PROPERTIES
     OUTPUT_NAME "sample-${PLATFORM}-${PROJECT_VERSION_FULL}"
@@ -101,21 +89,25 @@ set_target_properties(sample PROPERTIES
 )
 
 target_link_options(sample PRIVATE
+    ${PLATFORM_LINK_SCRIPT}
     -Wl,-Map=$<TARGET_FILE_DIR:sample>/sample-${PLATFORM}-${PROJECT_VERSION_FULL}.map
+)
+
+target_include_directories(sample BEFORE PRIVATE
+    src/platforms/stm32f1/system
 )
 
 target_include_directories(sample PRIVATE
     ${CMAKE_SOURCE_DIR}/src
-     ${CMAKE_BINARY_DIR}/generated
+    ${CMAKE_BINARY_DIR}/generated
 )
 
-target_link_libraries(sample
-    PRIVATE
-        stm32f1_cmsis
-        stm32f1_hal
-        chrono_clocks
-        gpio_driver
-        coro_lib
+target_link_libraries(sample PRIVATE
+    platform_flags
+    stm32f1_hal
+    chrono_clocks
+    gpio_driver
+    coro_lib
 )
 
 # =========================================================
