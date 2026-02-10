@@ -19,18 +19,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
+
       - name: Initialize and update submodules
         run: |
           git submodule sync --recursive
           git submodule update --init --recursive --remote --force
           git submodule status --recursive
-          
+
       - name: Install ARM toolchain
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc-arm-none-eabi cmake ninja-build
-          
+
       - name: Configure (STM32F1)
         run: |
           cmake -S . -B build-stm32f1 \
@@ -38,7 +38,22 @@ jobs:
             -DPLATFORM=${PLATFORM} \
             -DBUILD_TESTS=OFF \
             -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/arm-none-eabi.cmake
-            
+
       - name: Build
         run: |
           cmake --build build-stm32f1 --parallel
+
+      - name: Collect artifacts
+        run: |
+          mkdir artifacts
+          cp build/*.elf artifacts/ || true
+          cp build/*.bin artifacts/ || true
+          cp build/*.hex artifacts/ || true
+          cp build/*.map artifacts/ || true
+
+      - name: Upload firmware artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-${{ github.run_number }}
+          path: artifacts
+          retention-days: 7
