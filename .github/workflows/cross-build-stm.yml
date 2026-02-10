@@ -41,7 +41,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake --build build-stm32f1 --parallel
+          cmake --build build-stm32f1
 
       - name: Collect artifacts
         run: |
