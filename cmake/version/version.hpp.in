@@ -1,0 +1,12 @@
+#pragma once
+
+namespace app::version {
+
+inline constexpr int major = @PROJECT_VERSION_MAJOR@;
+inline constexpr int minor = @PROJECT_VERSION_MINOR@;
+inline constexpr int patch = @PROJECT_VERSION_PATCH@;
+
+inline constexpr const char* build = "@PROJECT_BUILD@";
+inline constexpr const char* full  = "@PROJECT_VERSION_FULL@";
+
+}

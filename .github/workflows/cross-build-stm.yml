@@ -1,4 +1,4 @@
-name: STM32 Cross Build
+name: Firmware build
 
 on:
   pull_request:
@@ -9,6 +9,10 @@ on:
 jobs:
   stm32f1-build:
     runs-on: ubuntu-latest
+
+    env:
+      BUILD_NUMBER: ${{ github.run_number }}
+      PLATFORM: stm32f1
 
     steps:
       - name: Checkout main repo
@@ -31,10 +35,10 @@ jobs:
         run: |
           cmake -S . -B build-stm32f1 \
             -G Ninja \
-            -DPLATFORM=stm32f1 \
+            -DPLATFORM=${PLATFORM} \
             -DBUILD_TESTS=OFF \
             -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/arm-none-eabi.cmake
             
       - name: Build
         run: |
-          cmake --build build-stm32f1
+          cmake --build build-stm32f1 --parallel

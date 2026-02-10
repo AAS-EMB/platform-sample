@@ -21,7 +21,6 @@ set(PLATFORM_COMPILE_OPTIONS
 set(PLATFORM_LINK_OPTIONS
     -mcpu=${MCU}
     -mthumb
-    -Wl,-Map=${CMAKE_PROJECT_NAME}.map
     -Wl,--gc-sections
     -Wl,--start-group
     -lc
