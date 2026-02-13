@@ -1,4 +1,4 @@
-[submodule "external/platform-drivers"]
-	path = external/platform-drivers
-	url = https://github.com/AAS-EMB/platform-drivers.git
+[submodule "external/platform-sdk"]
+	path   = external/platform-sdk
+	url    = https://github.com/AAS-EMB/platform-sdk.git
 	branch = main

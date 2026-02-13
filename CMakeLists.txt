@@ -57,7 +57,7 @@ set(GPIO_LIB ON CACHE BOOL "" FORCE)
 set(CORO_LIB ON CACHE BOOL "" FORCE)
 
 set(PLATFORM ${PLATFORM} CACHE STRING "Target platform" FORCE)
-add_subdirectory(external/platform-drivers)
+add_subdirectory(external/platform-sdk)
 
 # =========================================================
 # Target
